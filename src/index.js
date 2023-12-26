@@ -3,8 +3,9 @@ console.log("index me")
 import {initializeApp} from "firebase/app";
 
 import {
-    getFirestore , collection , getDocs,
-    addDoc, deleteDoc, doc
+    getFirestore , collection , onSnapshot,
+    addDoc, deleteDoc, doc,
+    query, where
 } from "firebase/firestore"
 
 const firebaseConfig = {
@@ -28,10 +29,16 @@ const db = getFirestore()
 
 const colRef = collection(db, 'books')
 
-// get collection data
+// queries 
 
-getDocs(colRef)
-    .then((snapshot)=>{
+const q = query(colRef, where("author", "==", "Femi Opebiyi"))
+
+// real time collection data
+
+
+
+
+    onSnapshot(q, (snapshot)=>{
         let books = []
 
         snapshot.docs.forEach((doc)=>{
@@ -39,9 +46,6 @@ getDocs(colRef)
         })
 
         console.log(books)
-    })
-    .catch(err => {
-        console.log(err.message)
     })
 
 
